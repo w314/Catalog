@@ -1,0 +1,29 @@
+<!-- TO DO:
+    focus on name input box
+-->
+{% extends 'base.html' %}
+{% block title %}
+    {{'Catalog/Creata New Item'}}
+{% endblock %}
+
+{% block content %}
+    <form method="post" action="{{url_for('create_item')}}">
+        <p>Item Name:</p>
+        <input type="text" name="name">
+        <p>Item Description:</p>
+        <input type="text" name="description">
+        <p>Category:</p>
+        <select name="category">
+            {% for category in categories: %}
+            <option value={{category.id}}
+                {% if category.name == category_name %}
+                    selected
+                {% endif %}
+                >
+            {{category.name}}
+            </option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Create Item">
+    </form>
+{% endblock %}

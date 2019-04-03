@@ -1,23 +1,19 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Catalog</title>
-    </head>
-    <body>
-        <ul id="catalogList">
-            {% for category in categories: %}
-                <li><a href={{url_for('show_category',category_id=category.id)}}>{{category.name}}</a></li>
-            {% endfor %}
-        </ul>
-        <ul id="itemList">
-            <a href="{{url_for('create_item')}}">create new item</a>
-            {% for item in items: %}
-                <li>
-                    {{item.name}} 
-                    <span class="item_category">({{item.relationship.name}})</span>
-                </li>
-            {% endfor %}
-        </ul>
-    </body>
-</html>
+{% extends 'base.html' %}
+{% block title %}Catalog{% endblock %}
+<a href="{{url_for('show_catalog')}}">Catalog</a>
+{% block content %}
+    <ul id="catalogList">
+        {% for category in categories: %}
+            <li><a href={{url_for('show_category',category_name=category.name)}}>{{category.name}}</a></li>
+        {% endfor %}
+    </ul>
+    <ul id="itemList">
+        <a href="{{url_for('create_item')}}">create new item</a>
+        {% for item in items: %}
+            <li>
+                {{item.name}} 
+                <span class="item_category">({{item.category.name}})</span>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

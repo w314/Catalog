@@ -1,0 +1,31 @@
+<!-- TO DO:
+    focus on name input box
+-->
+
+{% extends 'base.html' %}
+{% block title %}
+    {{ 'Catatlog : {}/edit'.format(item.name)}}
+{% endblock %}
+
+{% block content %}
+    <form method="post" action="{{url_for('edit_item', item_name=item.name)}}">
+        <p>Item Name:</p>
+        <input type="text" value="{{item.name}}" name="name">
+        <p>Item Description:</p>
+        <input type="text" value="{{item.description}}" name="description">
+        <p>Category:</p>
+        <select name="category">
+            {% for category in categories: %}
+                <option value={{category.id}}
+                    {% if category.name == item.category.name %}
+                        selected
+                    {% endif %}
+                    >
+                {{category.name}}
+                </option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Update Item">
+        <a href="{{url_for('show_category', category_name=item.category.name)}}">Cancel</a>
+    </form>
+{% endblock %}
