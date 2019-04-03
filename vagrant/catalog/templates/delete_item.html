@@ -9,12 +9,11 @@
         Are you sure you want to delete:</h2>
     <form method="post" 
         action="{{url_for('delete_item', item_name=item.name)}}">
-        <p>Item Name:</p>
-        <input type="text" name="name" value={{item.name}}>
-        <p>Item Description:</p>
-        <input type="text" name="description" value={{item.description}}>
-        <p>Category:</p>
-        <input type="text" name="category" value="{{item.category.name}}">
+        <p>
+            {{item.name}} 
+            <span class="item-category">({{item.category.name}})</span>
+        </p>
+        <p>{{item.description}}</p>
         <input type="submit" value="Delete Item">
         <a href="{{url_for('show_category',category_name=item.category.name)}}">Cancel</a>
     </form>

@@ -5,9 +5,13 @@
         <title>{% block title %}{% endblock %}</title>
     </head>
     <body>
-        <nav>
-            <a href="{{url_for('show_catalog')}}">Catalog</a>
-        </nav>
+        <header>
+            <nav>
+                <a href="{{url_for('show_catalog')}}">Catalog</a>
+            </nav>
+            <section class="member">
+            </section>
+        </header>
         <main>
             {% block content %}
             {% endblock %}
