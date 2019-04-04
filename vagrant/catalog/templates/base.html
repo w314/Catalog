@@ -3,11 +3,13 @@
     <head>
         <meta charset="utf-8">
         <title>{% block title %}{% endblock %}</title>
+        {% block head_script %}{% endblock %}
     </head>
     <body>
         <header>
             <nav>
                 <a href="{{url_for('show_catalog')}}">Catalog</a>
+                {% block login %}{% endblock %}
             </nav>
             <section class="member">
             </section>
@@ -24,10 +26,10 @@
                     {% endif %}
                 {% endwith %}
             </section>
-
             {% block content %}
-            {% endblock %}
-            
-        </main>
+            {% endblock %}            
+        </main>        
+        {% block script %}
+        {% endblock %}
     </body>
 </html>
