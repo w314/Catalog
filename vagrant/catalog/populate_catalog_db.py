@@ -93,3 +93,5 @@ for item in items:
         )
     session.add(new_item)
     session.commit()
+
+print('Categories and items created in catalog database.')

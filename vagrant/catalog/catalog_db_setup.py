@@ -29,6 +29,7 @@ class User(Base):
 
     id = Column(Integer, primary_key=True)
 
+print('Catalog database is created.')
 
 engine = create_engine('sqlite:///catalog.db')
 Base.metadata.create_all(engine)
