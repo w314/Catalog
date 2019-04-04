@@ -1,17 +1,27 @@
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, flash
+app = Flask(__name__)
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Category, Item
 from sqlalchemy import desc
 
-app = Flask(__name__)
-
+from flask import session as login_session
+# to generate state token
+import random, string
 
 engine = create_engine('sqlite:///catalog.db')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+
+@app.route('/login')
+def show_login():
+    state = ''.join(random.choice(string.ascii_uppercase + string.digits)
+        for x in range(32))
+    login_session['state'] = state
+    return 'The current session state is: {}'.format(login_session['state'])
 
 # home page to display all categories and the last few added items
 @app.route('/')
@@ -49,6 +59,7 @@ def create_item(category_name=''):
         # Get category name form database
         # even if there was one in the url, user could have changed it
         category = session.query(Category).filter_by(id = request.form['category']).one()
+        flash('New catalog item created!')
         return redirect(url_for('show_category',
             category_name = category.name))
     else:
@@ -69,6 +80,7 @@ def edit_item(item_name):
         item.category_id = request.form['category']
         session.add(item)
         session.commit()
+        flash('Catalog item is updated!')
         return redirect(url_for('show_category', category_name=item.category.name))
     else:
         return render_template('edit_item.html',
@@ -84,11 +96,13 @@ def delete_item(item_name):
     if request.method == 'POST':
         session.delete(item)
         session.commit()
+        flash('Catalog item is deleted!')
         return redirect(url_for('show_category', category_name=category_name))
     else:
         return render_template('delete_item.html', item=item)
 
 
 if __name__ == '__main__':
+    app.secret_key = 'super_secret_key'
     app.debug = True
     app.run(host='0.0.0.0', port=8000, threaded=False)
