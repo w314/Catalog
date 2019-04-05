@@ -133,6 +133,45 @@ def gconnect():
     return output
 
 
+# Logout user: remove access_token, reset login_session
+@app.route('/gdisconnect')
+def gdisconnet():
+    access_token = login_session['access_token']
+    # If there is no access_token in login_session abort
+    if access_token is None:
+        print('access_token is None')
+        response = make_response(json.dumps(
+            'Current user not connected'), 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    print('In gdisconnet access_token is: {}'.format(access_token))
+
+    # Revoke access_token from user
+    print('Revoking access from user: {}'.format(login_session['email']))
+    url = 'https://accounts.google.com/o/oauth2/revoke?token={}'.format(
+        access_token)
+    h = httplib2.Http()
+    result = h.request(url, 'GET')[0]
+    print('Result of acces token revoke:')
+    print(result)
+    # If revoke was succesfull, clear login_session information
+    if result['status'] == '200':
+        del login_session['access_token']
+        del login_session['google_id']
+        del login_session['username']
+        del login_session['email']
+        del login_session['picture']
+        response = make_response(json.dumps('Logout succesfull'), 200)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    # If not send error message
+    else:
+        response = make_response(json.dumps(
+            'Failed to revoke token for user'), 400)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+
 # home page to display all categories and the last few added items
 @app.route('/')
 @app.route('/catalog')
