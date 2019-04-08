@@ -1,7 +1,7 @@
 from flask import Flask, render_template, url_for, request, redirect, flash
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Category, Item
+from catalog_db_setup import Base, Category, Item, User
 from sqlalchemy import desc
 # Import for session management and to generate state token
 from flask import session as login_session
@@ -14,6 +14,7 @@ import httplib2
 import json
 from flask import make_response
 import requests
+from sqlalchemy import inspect
 
 
 app = Flask(__name__)
@@ -37,11 +38,8 @@ def show_login():
 
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
-    print('In gconnect')
-    print('Printing login session')
-    print(login_session)
-    print('printing state received from client')
-    print(request.args.get('state'))
+    print('state in login_session: {}'.format(login_session['state']))
+    print('state received from client: {}'.format(request.args.get('state')))
     # Check if token sent by client is the same as token sent by server
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state parameter'), 401)
@@ -49,7 +47,7 @@ def gconnect():
         return response
     # If client has the right state token collect one-time code
     code = request.data
-    print('State Token is checked')
+    print('state token received is OK')
 
     # Try exchanging one-time code to credentails object
     # credential object will have the access token
@@ -109,15 +107,21 @@ def gconnect():
     userinfo_url = 'https://www.googleapis.com/oauth2/v1/userinfo'
     params = {'access_token': credentials.access_token, 'alt': 'json'}
     answer = requests.get(userinfo_url, params=params)
-    print('Printing answer')
-    print(answer)
+    # print('Printing answer')
+    # print(answer)
     data = answer.json()
     login_session['username'] = data['name']
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
 
-    print('Logins session updated')
-    print(login_session)
+    # Check if user is already in database
+    user_id = get_user_id(login_session['email'])
+    # Create user if needed
+    if user_id is None:
+        user_id = create_user(login_session)
+    # Store user's id in login_session
+    login_session['user_id'] = user_id
+    print('User {} is succesfully logged in'.format(login_session['email']))
 
     output = '''
         <h1>Welcome {} !</h1>
@@ -129,9 +133,31 @@ def gconnect():
         >
         '''.format(login_session['username'], login_session['picture'])
     flash('you are now logged in as {}'.format(login_session['username']))
-    print('done!')
     return output
 
+
+def create_user(login_session):
+    # Add user to database
+    user = User(
+        name=login_session['username'],
+        email=login_session['email'],
+        picture=login_session['picture'])
+    session.add(user)
+    session.commit()
+    # Return new user's id
+    new_user = session.query(User).filter_by(
+        email=login_session['email']).one()
+    print('User: {} is created with id: {}'.format(
+        login_session['email'], new_user.id))
+    return new_user.id
+
+
+def get_user_id(email):
+    try:
+        user = session.query(User).filter_by(email=email).one()
+        return user.id
+    except:
+        return None
 
 # Logout user: remove access_token, reset login_session
 @app.route('/gdisconnect')
@@ -147,14 +173,12 @@ def gdisconnet():
     print('In gdisconnet access_token is: {}'.format(access_token))
 
     # Revoke access_token from user
-    print('Revoking access from user: {}'.format(login_session['email']))
     url = 'https://accounts.google.com/o/oauth2/revoke?token={}'.format(
         access_token)
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
-    print('Result of acces token revoke:')
-    print(result)
     # If revoke was succesfull, clear login_session information
+    print('User {} is succesfully logged out'.format(login_session['email']))
     if result['status'] == '200':
         del login_session['access_token']
         del login_session['google_id']
@@ -199,11 +223,15 @@ def show_category(category_name):
 @app.route('/catalog/items/create', methods=['GET', 'POST'])
 @app.route('/catalog/<category_name>/items/create', methods=['GET', 'POST'])
 def create_item(category_name=''):
+    # If user is not logged in redirect to login page
+    if 'username' not in login_session:
+        return redirect('/login')
     if request.method == 'POST':
         new_item = Item(
             name=request.form['name'],
             description=request.form['description'],
-            category_id=request.form['category'])
+            category_id=request.form['category'],
+            user_id=login_session['user_id'])
         session.add(new_item)
         session.commit()
         # Get category name form database
@@ -223,6 +251,9 @@ def create_item(category_name=''):
 # edit item page to edit specific item
 @app.route('/catalog/<item_name>/edit', methods=['GET', 'POST'])
 def edit_item(item_name):
+    # If user is not logged in redirect to login page
+    if 'username' not in login_session:
+        return redirect('/login')
     categories = session.query(Category).all()
     item = session.query(Item).filter_by(name=item_name).one()
     if request.method == 'POST':
@@ -239,16 +270,22 @@ def edit_item(item_name):
                                categories=categories, item=item)
 
 
-# Delete item
+# Delete item page
 @app.route('/catalog/<item_name>/delete', methods=['GET', 'POST'])
 def delete_item(item_name):
+    # If user is not logged in redirect to login page
+    if 'username' not in login_session:
+        return redirect('/login')
     item = session.query(Item).filter_by(name=item_name).one()
-    # Save name of category for redirect
-    category_name = item.category.name
     if request.method == 'POST':
+        # Save name of category for redirect
+        category_name = item.category.name
+        # Delete item
         session.delete(item)
         session.commit()
+        # Flash message about succesful deletion
         flash('Catalog item is deleted!')
+        # Redirect to Category page
         return redirect(url_for('show_category', category_name=category_name))
     else:
         return render_template('delete_item.html', item=item)
