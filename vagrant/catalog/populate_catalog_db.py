@@ -39,7 +39,7 @@ items = [
         'name': 'Red',
         'description': 'sunset color',
         'category_id': 2,
-        'user_id': 2,        
+        'user_id': 2,
     },
     {
         'name': 'Yellow',
@@ -88,7 +88,7 @@ items = [
         'description': 'to speak in Russia',
         'category_id': 4,
         'user_id': 1,
-    },    
+    },
     {
         'name': 'Python',
         'description': 'to use when talking to snakes',

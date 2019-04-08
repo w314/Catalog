@@ -24,8 +24,10 @@
             <li><a href={{url_for('show_category',category_name=category.name)}}>{{category.name}}</a></li>
         {% endfor %}
     </ul>
-    <ul id="itemList">
+    {% if user != None %}
         <a href="{{url_for('create_item')}}">create new item</a>
+    {% endif %}
+    <ul id="itemList">
         {% for item in items: %}
             <li>
                 {{item.name}} 
