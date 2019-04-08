@@ -161,7 +161,7 @@ def get_user_id(email):
 
 # Logout user: remove access_token, reset login_session
 @app.route('/gdisconnect')
-def gdisconnet():
+def gdisconnect():
     access_token = login_session['access_token']
     # If there is no access_token in login_session abort
     if access_token is None:
@@ -206,7 +206,9 @@ def show_catalog():
         session.query(Item). \
         order_by(desc(Item.id)). \
         limit(items_to_show).all()
-    return render_template('catalog.html', categories=categories, items=items)
+    user = login_session.get('email')
+    return render_template(
+        'catalog.html', categories=categories, items=items, user=user)
 
 
 # category page to display one category with all its items

@@ -8,11 +8,13 @@
     <body>
         <header>
             <nav>
-                <a href="{{url_for('show_catalog')}}">Catalog</a>
-                {% block login %}{% endblock %}
+                <div class="catalog">
+                    <a href="{{url_for('show_catalog')}}">Catalog</a>
+                </div>
+                <div class="login">
+                    {% block login %}{% endblock %}
+                </div>
             </nav>
-            <section class="member">
-            </section>
         </header>
         <main>
             <section class="flash-messages">

@@ -1,6 +1,23 @@
 {% extends 'base.html' %}
 {% block title %}Catalog{% endblock %}
-<a href="{{url_for('show_catalog')}}">Catalog</a>
+{% block login %}
+    <a 
+        {% if user == None: %}
+            href="{{url_for('show_login')}}"
+        {% endif %}
+        {% if user != None: %}
+            href="{{url_for('gdisconnect')}}"
+        {% endif %}
+    >
+        {% if user == None: %}
+            Login
+        {% endif %}
+        {% if user != None: %}
+            Logout
+        {% endif %}
+    </a>
+{% endblock %}
+
 {% block content %}
     <ul id="catalogList">
         {% for category in categories: %}
