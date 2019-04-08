@@ -1,7 +1,9 @@
-{% extends 'base.html' %}
-
-{% block title %}Catalog: Login{% endblock %}
-{% block head_script %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>{% block title %}{% endblock %}</title>
+        {% block head_script %}{% endblock %}
     <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
     <script
         src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js">
@@ -19,19 +21,12 @@
       }
     </script>
     <!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
-
-{% endblock %}
-{% block login %}
+</head>
+<body>
     <!-- GOOGLE PLUS SIGN IN BUTTON-->      
       <button id="signinButton">Google Signin</button>
     <!--END GOOGLE PLUS SIGN IN BUTTON -->
-{% endblock %}
-
-{% block content %}
     <div id="result"></div>
-{% endblock %}
-
-{% block script %}
     <script>
         $('#signinButton').click(function() {
             function signInCallback(authResult) {
@@ -63,4 +58,5 @@
             auth2.grantOfflineAccess().then(signInCallback);
         })
     </script>
-{% endblock %}
+</body>
+</html>

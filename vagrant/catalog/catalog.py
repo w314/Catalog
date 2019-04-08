@@ -185,9 +185,7 @@ def gdisconnect():
         del login_session['username']
         del login_session['email']
         del login_session['picture']
-        response = make_response(json.dumps('Logout succesfull'), 200)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+        return redirect(url_for('show_catalog'))
     # If not send error message
     else:
         response = make_response(json.dumps(
