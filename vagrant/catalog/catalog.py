@@ -132,7 +132,6 @@ def gconnect():
                     -moz-border-radius: 150px;"
         >
         '''.format(login_session['username'], login_session['picture'])
-    flash('you are now logged in as {}'.format(login_session['username']))
     return output
 
 
@@ -158,6 +157,15 @@ def get_user_id(email):
         return user.id
     except:
         return None
+
+def get_user():
+    # Check if user is logged in
+    user = login_session.get('email')
+    # If user is logged in get user info
+    if user is not None:
+        user = session.query(User).filter_by(id=login_session['user_id']).one()
+    return user
+
 
 # Logout user: remove access_token, reset login_session
 @app.route('/gdisconnect')
@@ -198,15 +206,17 @@ def gdisconnect():
 @app.route('/')
 @app.route('/catalog')
 def show_catalog():
+    # Get categories to show
     categories = session.query(Category).all()
+    # Limit items shown to:
     items_to_show = 10
+    # Get the last "items_to_show" items added 
     items = \
         session.query(Item). \
         order_by(desc(Item.id)). \
         limit(items_to_show).all()
-    user = login_session.get('email')
     return render_template(
-        'catalog.html', categories=categories, items=items, user=user)
+        'catalog.html', categories=categories, items=items, user=get_user)
 
 
 # category page to display one category with all its items
@@ -215,8 +225,9 @@ def show_catalog():
 def show_category(category_name):
     category = session.query(Category).filter_by(name=category_name).one()
     items = session.query(Item).filter_by(category_id=category.id).all()
+    user = get_user()
     return render_template(
-        'show_category.html', category=category, items=items)
+        'show_category.html', category=category, items=items, user=user)
 
 
 # new item page for adding new items to catalog
@@ -243,9 +254,10 @@ def create_item(category_name=''):
                                 category_name=category.name))
     else:
         categories = session.query(Category).all()
+        user = get_user()
         return render_template(
             'create_item.html',
-            categories=categories, category_name=category_name)
+            categories=categories, category_name=category_name, user=user)
 
 
 # edit item page to edit specific item
@@ -266,8 +278,9 @@ def edit_item(item_name):
         return redirect(url_for('show_category',
                                 category_name=item.category.name))
     else:
+        user = get_user()
         return render_template('edit_item.html',
-                               categories=categories, item=item)
+                               categories=categories, item=item, user=user)
 
 
 # Delete item page
@@ -288,7 +301,8 @@ def delete_item(item_name):
         # Redirect to Category page
         return redirect(url_for('show_category', category_name=category_name))
     else:
-        return render_template('delete_item.html', item=item)
+        user = get_user()
+        return render_template('delete_item.html', item=item, user=user)
 
 
 if __name__ == '__main__':

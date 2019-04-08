@@ -12,7 +12,25 @@
                     <a href="{{url_for('show_catalog')}}">Catalog</a>
                 </div>
                 <div class="login">
-                    {% block login %}{% endblock %}
+                    {# if user is logged in show user name#}
+                    {% if user != None: %}
+                        <span class="user-name">
+                            Logged in as {{user.name}}
+                        </span>
+                    {% endif %}
+                    <a 
+                        {% if user == None: %}
+                            href="{{url_for('show_login')}}"
+                        {% else %}
+                            href="{{url_for('gdisconnect')}}"
+                        {% endif %}
+                    >
+                        {% if user == None: %}
+                            Login
+                        {% else %}
+                            Logout
+                        {% endif %}
+                    </a>
                 </div>
             </nav>
         </header>
