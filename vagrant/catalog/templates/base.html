@@ -3,7 +3,10 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="static/styles.css">
+        {# link to css #}
+        <link rel="stylesheet" href="../static/styles.css">
+        {# link to icon library #}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <title>{% block title %}{% endblock %}</title>
         {% block head_script %}{% endblock %}
     </head>
@@ -11,16 +14,34 @@
         <header class="full-width">
             <nav>
                 <div class="catalog">
-                    <a href="{{url_for('show_catalog', user_id=user_id)}}">Catalog</a>
+                    <a class="nav-button" href="{{url_for('show_catalog',
+                                                user_id=user_id)}}">
+                        <i class="fa fa-home"> Catalog</i>
+                    </a>
                 </div>
-                <div class="login">
+                <div class="user-name">
                     {# if user is logged in show user name#}
                     {% if user != None: %}
                         <span class="user-name">
-                            Logged in as {{user.name}}
+                            Welcome {{user.name}}!
                         </span>
                     {% endif %}
-                    <a 
+                </div>
+                <div class="log-status">
+                    <a class="nav-button"
+                        {% if user == None: %}
+                            href="{{url_for('show_login')}}"
+                        {% else %}
+                            href="{{url_for('gdisconnect')}}"
+                        {% endif %}
+                    >
+                        {% if user == None: %}
+                            <i class="fa fa-sign-in">Login</i>
+                        {% else %}
+                            <i class="fa fa-sign-out">Logout</i>
+                        {% endif %}
+                    </a>
+<!--                     <a 
                         {% if user == None: %}
                             href="{{url_for('show_login')}}"
                         {% else %}
@@ -33,7 +54,7 @@
                             Logout
                         {% endif %}
                     </a>
-                </div>
+ -->                </div>
             </nav>
         </header>
         <main class="container">

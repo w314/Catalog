@@ -2,8 +2,11 @@
 {% block title %}{{ 'Catalog: {}'.format(category.name) }}{% endblock %}
 {% block content %}
     <h2>{{category.name}}</h2>
-    <a href="{{url_for('create_item', category_name=category.name)}}">
-        create new item</a>
+    {# Show create new item button if user is logged in #}
+    {% if user != None: %}
+        <a href="{{url_for('create_item', category_name=category.name)}}">
+            create new item</a>
+    {% endif %}
     <ul id="item_list">
         {% for item in items: %}
             <li class="item">

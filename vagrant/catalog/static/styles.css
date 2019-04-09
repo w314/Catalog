@@ -1,13 +1,17 @@
 /*** COLORS ***/
 :root{
-    /* for restuarant hours */
-    --soft-gray: #666;
+    --border: 0.0625rem solid var(--dark-gray);
+    --focus-border: 0.125rem solid var(--white);
+    --list-item-visited: #d44d5c;
+    --list-item: #773344;
+    --category-in-brackets: #e3b5a4;
+    /*--title: #773344;*/
+    /*--title: #0b0014;*/
+    --title: #651e3e;
+    --header-background: #f5e9e2;
+    --list-background: #fdfbfb;
 
-    /*for header & footer background*/
-    --dark-gray: #252831;
-    --light-gray: #f3f3f3;
 
-    --gray: #ccc;
 }
 
 
@@ -36,6 +40,8 @@ video {
     max-width: 50rem;
     margin: auto;
     font: 400 1rem arial, sans-serif;
+    background-color: var(--list-background);
+
 }
 
 .container {
@@ -46,14 +52,74 @@ video {
 /*** HEADER ***/
 
 header {
-    background-color: var(--light-gray);
-    border-bottom: 0.0625rem solid var(--gray);
+    background-color: var(--header-background);
+    border-bottom: 0.0625rem solid var(--white);
+    padding: 1.25rem 0.625rem 1.25rem 0.625rem;
+}
+
+nav {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    font: 400 1.2rem arial, sans-serif;
+}
+
+.nav-button {
+    padding: 0.3125rem;
+}
+
+.user-name {
+    font: 400 1rem arial, sans-serif;
+    font-variant: small-caps;
+    font-style: italic;
+    color: var(--title);
+
 }
 
 
-/*** CATEGORY LIST ***/
+/*** CATEGORY ***/
 
-.category {
-    text-decoration: none;
+.categories,
+.items {
+  /*background-color: var(--light-gray);*/
+  background-color: var(--list-background);
+  /*background-color: #e7eff6;*/
+  margin: 1.25rem;
+  padding: 1.25rem;
 }
 
+.categories {
+  width: 35%;
+
+}
+
+h2 {
+    font: 300 1.2rem arial, sans-serif;
+    /*color: var(--dark-gray);*/
+    color: var(--title);
+    /*color: red;*/
+    padding: 0 0 0 1.25rem;
+}
+
+a {
+  text-decoration: none;
+  color: var(--list-item);
+}
+
+a:visited {
+  color: var(--list-item-visited);
+}
+
+li {
+  list-style-type: none;  
+  margin: 0.3125rem 0 0 0;
+}
+
+.items {
+  width: 55%;
+
+}
+
+.item-category {
+  color: var(--category-in-brackets);
+}
