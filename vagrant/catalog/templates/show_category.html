@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}{{ 'Catalog : {}'.format(category.name) }}{% endblock %}
+{% block title %}{{ 'Catalog: {}'.format(category.name) }}{% endblock %}
 {% block content %}
     <h2>{{category.name}}</h2>
     <a href="{{url_for('create_item', category_name=category.name)}}">
@@ -9,12 +9,15 @@
             <li class="item">
                 {{item.name}}
                 <div class="item_description">{{item.description}}</div>
-                <a class="edit_link" href={{url_for('edit_item', item_name=item.name)}}>Edit</a>                    
-                <a 
-                    class="delete_link" 
-                    href={{url_for('delete_item', item_name=item.name)}}>
-                    Delete
-                </a>
+                {# Shwow edit & delete buttons if user is owner of item #}
+                {% if user.id == item.user.id: %}
+                    <a class="edit_link" href={{url_for('edit_item', item_name=item.name)}}>Edit</a>                    
+                    <a 
+                        class="delete_link" 
+                        href={{url_for('delete_item', item_name=item.name)}}>
+                        Delete
+                    </a>
+                {% endif %}
             </li>
         {% endfor %}
     </ul>

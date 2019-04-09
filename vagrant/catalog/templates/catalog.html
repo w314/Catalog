@@ -4,7 +4,11 @@
     <ul id="category-list">
         {% for category in categories: %}
             <li class="category">
-                <a href={url_for('show_category',category_name=category.name)}>{{category.name}}</a>
+                <a href="{{url_for(
+                    'show_category',category_name=category.name)}}"
+                >
+                    {{category.name}}
+                </a>
             </li>
         {% endfor %}
     </ul>
