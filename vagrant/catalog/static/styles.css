@@ -1,0 +1,59 @@
+/*** COLORS ***/
+:root{
+    /* for restuarant hours */
+    --soft-gray: #666;
+
+    /*for header & footer background*/
+    --dark-gray: #252831;
+    --light-gray: #f3f3f3;
+
+    --gray: #ccc;
+}
+
+
+
+/*** GENERAL ***/
+
+img,
+embed,
+object,
+video {
+  max-width: 100%;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+.full-width {
+    width: 100%;
+}
+
+
+.wrapper {
+    max-width: 50rem;
+    margin: auto;
+    font: 400 1rem arial, sans-serif;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/*** HEADER ***/
+
+header {
+    background-color: var(--light-gray);
+    border-bottom: 0.0625rem solid var(--gray);
+}
+
+
+/*** CATEGORY LIST ***/
+
+.category {
+    text-decoration: none;
+}
+

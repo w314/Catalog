@@ -1,17 +1,26 @@
 {% extends 'base.html' %}
 {% block title %}Catalog{% endblock %}
-<a href="{{url_for('show_catalog')}}">Catalog</a>
 {% block content %}
-    <ul id="catalogList">
+    <ul id="category-list">
         {% for category in categories: %}
-            <li><a href={{url_for('show_category',category_name=category.name)}}>{{category.name}}</a></li>
+            <li class="category">
+                <a href="{{url_for(
+                    'show_category',category_name=category.name)}}"
+                >
+                    {{category.name}}
+                </a>
+            </li>
         {% endfor %}
     </ul>
-    <ul id="itemList">
+    {% if user != None %}
         <a href="{{url_for('create_item')}}">create new item</a>
+    {% endif %}
+    <ul id="itemList">
         {% for item in items: %}
             <li>
-                {{item.name}} 
+                <a href="{{url_for(
+                    'show_item', category_name=item.category.name, item_name=item.name)}}">
+                    {{item.name}}</a>
                 <span class="item_category">({{item.category.name}})</span>
             </li>
         {% endfor %}
