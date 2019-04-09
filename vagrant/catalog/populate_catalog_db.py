@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from catalog_db_setup import Base, Category, Item
+from catalog_db_setup import Base, Category, Item, User
 
 engine = create_engine('sqlite:///catalog.db')
 Base.metadata.bind = engine
@@ -131,9 +131,27 @@ for item in items:
     new_item = Item(
         name=item['name'],
         description=item['description'],
-        category_id=item['category_id']
-        )
+        category_id=item['category_id'],
+        user_id=item['user_id'])
     session.add(new_item)
+    session.commit()
+
+users = [
+    {
+        'email': 'piroska.werner@gmail.com',
+        'name': 'Piroska',
+    },
+    {
+        'email': 'wpzaze@gmail.com', 
+        'name': 'Zaze',
+    },
+]
+
+for user in users:
+    new_user = User(
+        name=user['name'],
+        email=user['email'])
+    session.add(new_user)
     session.commit()
 
 print('Categories and items created in catalog database.')

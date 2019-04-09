@@ -51,6 +51,7 @@ def gconnect():
 
     # Try exchanging one-time code to credentails object
     # credential object will have the access token
+    print('Trying to exchange one-time code for credentils')
     try:
         oauth_flow = flow_from_clientsecrets('client_secret.json',
                                              scope='')
@@ -158,12 +159,16 @@ def get_user_id(email):
     except:
         return None
 
+
 def get_user():
     # Check if user is logged in
+    print('Cheking if user email is in login_session')
     user = login_session.get('email')
+    print('Email in login_session is: {}'.format(user))
     # If user is logged in get user info
     if user is not None:
-        user = session.query(User).filter_by(id=login_session['user_id']).one()
+        user = session.query(User).filter_by(email=login_session['email']).one()
+    print('Returning user: {}'.format(user))
     return user
 
 
@@ -179,6 +184,7 @@ def gdisconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
     print('In gdisconnet access_token is: {}'.format(access_token))
+    print('In gconnect user email is: {}'.format(login_session['email']))
 
     # Revoke access_token from user
     url = 'https://accounts.google.com/o/oauth2/revoke?token={}'.format(
@@ -210,18 +216,19 @@ def show_catalog():
     categories = session.query(Category).all()
     # Limit items shown to:
     items_to_show = 10
-    # Get the last "items_to_show" items added 
+    # Get the last "items_to_show" items added
     items = \
         session.query(Item). \
         order_by(desc(Item.id)). \
         limit(items_to_show).all()
+    # Get current user
+    user = get_user()
     return render_template(
-        'catalog.html', categories=categories, items=items, user=get_user)
+        'catalog.html', categories=categories, items=items, user=user)
 
 
-# category page to display one category with all its items
+# Category page to display one category with all its items
 @app.route('/catalog/<category_name>')
-# @app.route('/catalog/<category_name>>/items')
 def show_category(category_name):
     category = session.query(Category).filter_by(name=category_name).one()
     items = session.query(Item).filter_by(category_id=category.id).all()
@@ -230,7 +237,17 @@ def show_category(category_name):
         'show_category.html', category=category, items=items, user=user)
 
 
-# new item page for adding new items to catalog
+# Item page to display one item
+@app.route('/catalog/<category_name>/<item_name>')
+def show_item(category_name, item_name):
+    item = session.query(Item).filter_by(name=item_name).one()
+    user = get_user()
+    print('Showing {} in {}'.format(
+        item.name, item.category.name))
+    return render_template(
+        'show_item.html', category_name=category_name, item=item, user=user)
+
+# New item page for adding new items to catalog
 @app.route('/catalog/items/create', methods=['GET', 'POST'])
 @app.route('/catalog/<category_name>/items/create', methods=['GET', 'POST'])
 def create_item(category_name=''):

@@ -2,14 +2,16 @@
 <html>
     <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="static/styles.css">
         <title>{% block title %}{% endblock %}</title>
         {% block head_script %}{% endblock %}
     </head>
-    <body>
-        <header>
+    <body class="wrapper">
+        <header class="full-width">
             <nav>
                 <div class="catalog">
-                    <a href="{{url_for('show_catalog')}}">Catalog</a>
+                    <a href="{{url_for('show_catalog', user_id=user_id)}}">Catalog</a>
                 </div>
                 <div class="login">
                     {# if user is logged in show user name#}
@@ -34,8 +36,8 @@
                 </div>
             </nav>
         </header>
-        <main>
-            <section class="flash-messages">
+        <main class="container">
+            <section class="flash-message">
                 {% with messages = get_flashed_messages() %}
                     {% if messages %}
                         <ul>
@@ -51,5 +53,8 @@
         </main>        
         {% block script %}
         {% endblock %}
+        <footer>
+            <p>{{'user id is: {}'.format(user.id)}}</p>
+        </footer>
     </body>
 </html>
