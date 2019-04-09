@@ -142,7 +142,7 @@ users = [
         'name': 'Piroska',
     },
     {
-        'email': 'wpzaze@gmail.com', 
+        'email': 'wpzaze@gmail.com',
         'name': 'Zaze',
     },
 ]
