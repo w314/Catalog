@@ -23,7 +23,7 @@
                     <a href="{{url_for(
                         'show_item', category_name=item.category.name, item_name=item.name)}}">
                         {{item.name}}</a>
-                    <span class="item-category">({{item.category.name}})</span>
+                    <span class="category-of-item">({{item.category.name}})</span>
                 </li>
             {% endfor %}
         </ul>
