@@ -28,7 +28,12 @@
             {% endfor %}
         </ul>
         {% if user != None %}
-            <a href="{{url_for('create_item')}}">create new item</a>
+            <a 
+                class="new-item" 
+                href="{{url_for('create_item')}}"
+            >
+                <i class="fa fa-plus"> New Item</i>
+            </a>
         {% endif %}
     </section>
 {% endblock %}

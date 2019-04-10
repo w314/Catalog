@@ -124,9 +124,24 @@ li {
 
 .items {
   width: 55%;
+  position: relative;
 
 }
 
 .item-category {
-  color: var(--category-in-brackets);
+    color: var(--category-in-brackets);
+}
+
+.new-item {
+    padding: 0.3125rem;
+    font: 600 1rem arial, sans-serif;
+    background-color: var(--header-background);
+    color: var(--title);
+    /*border: 0.125rem solid var(--light-gray);*/
+    /*border: 0.125rem solid var(--title);*/
+    border: 0.125rem solid var(--category-in-brackets);
+    border-radius: 0.625rem;
+    position: absolute;
+    bottom: 0.625rem;
+    right: 0.625rem;
 }
