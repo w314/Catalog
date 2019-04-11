@@ -287,3 +287,15 @@ section.full-page-container .cancel-button {
     color: var(--list-item-visited);
     font-weight: 500;
 }
+
+
+/*** SHOW ITEM ***/
+
+section.show-item .cancel-button {
+    top: 0;
+    right: 0;
+    border-bottom: 0.0625rem solid var(--light-gray);
+    border-left: 0.0625rem solid var(--light-gray);
+    color: var(--light-gray);
+    font-size: 0.8rem;
+}
