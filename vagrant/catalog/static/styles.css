@@ -34,6 +34,7 @@ video {
     margin: auto;
     font: 400 1rem arial, sans-serif;
     background-color: var(--list-background);
+    color: var(--title);
 
 }
 
@@ -261,3 +262,29 @@ section.full-page-container .cancel-button {
 /*    text-decoration: underline;
     text-decoration-color: var(--title);
 */}
+
+
+/*** DELET ITEM PAGE ***/
+
+
+.delete-form {
+    color: var(--title);
+}
+
+.name {
+    font: inherit;
+    font-size: 1.1rem;
+}
+
+.description {
+    font: inherit;
+}
+
+#confirmation-question {
+    font-style: italic;             
+}
+
+#item-to-delete {
+    color: var(--list-item-visited);
+    font-weight: 500;
+}

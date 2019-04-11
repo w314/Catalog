@@ -5,16 +5,25 @@
 {% endblock %}
 
 {% block content %}
-    <h2 id="delete_confirmation_question">
-        Are you sure you want to delete:</h2>
-    <form method="post" 
-        action="{{url_for('delete_item', item_name=item.name)}}">
-        <p>
-            {{item.name}} 
-            <span class="item-category">({{item.category.name}})</span>
-        </p>
-        <p>{{item.description}}</p>
-        <input type="submit" value="Delete Item">
-        <a href="{{url_for('show_category',category_name=item.category.name)}}">Cancel</a>
-    </form>
+    <section class="content-container full-page-container">
+        <h2 id="confirmation-question">
+        <a 
+            class="button cancel-button" 
+            href="{{url_for('show_category', category_name=item.category.name)}}"
+        >
+            <i class="fa fa-times"> Cancel</i>
+        </a>
+            Are you sure you want to delete <span id="item-to-delete">{{item.name}}</span>?</h2>
+        <form class="form delete-form" method="post" 
+            action="{{url_for('delete_item', item_name=item.name)}}">
+            <p class="name">
+                {{item.name}} 
+                <span class="category-of-item">({{item.category.name}})</span>
+            </p>
+            <p class="description">{{item.description}}</p>
+            <div class="control-buttons">
+                <input class="button update-button" type="submit" value="Delete">
+            </div>
+        </form>
+    </section>
 {% endblock %}
