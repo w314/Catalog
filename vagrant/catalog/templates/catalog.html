@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Catalog{% endblock %}
 {% block content %}
-    <section class="categories">
+    <section class="content-container categories">
         <h2>Categories</h2>
         <ul id="category-list">
             {% for category in categories: %}
@@ -13,9 +13,10 @@
                     </a>
                 </li>
             {% endfor %}
+
         </ul>
     </section>
-    <section class="items">
+    <section class="content-container items">
         <h2>Items</h2>
         <ul id="itemList">
             {% for item in items: %}

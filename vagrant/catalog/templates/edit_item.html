@@ -8,24 +8,40 @@
 {% endblock %}
 
 {% block content %}
-    <form method="post" action="{{url_for('edit_item', item_name=item.name)}}">
-        <p>Item Name:</p>
-        <input type="text" value="{{item.name}}" name="name">
-        <p>Item Description:</p>
-        <input type="text" value="{{item.description}}" name="description">
-        <p>Category:</p>
-        <select name="category">
-            {% for category in categories: %}
-                <option value={{category.id}}
-                    {% if category.name == item.category.name %}
-                        selected
-                    {% endif %}
-                    >
-                {{category.name}}
-                </option>
-            {% endfor %}
-        </select>
-        <input type="submit" value="Update Item">
-        <a href="{{url_for('show_category', category_name=item.category.name)}}">Cancel</a>
-    </form>
+    <section class="content-container full-page-container" id="edit-item-content">
+        <h2>{{'Edit {}'.format(item.name)}}</h2>
+        <a 
+            class="button cancel-button" 
+            href="{{url_for('show_category', category_name=item.category.name)}}"
+        >
+            <i class="fa fa-times"> Cancel</i>
+        </a>
+        <form class="form" method="post" action="{{url_for('edit_item', item_name=item.name)}}">
+            <div class="form-field">
+                <label for="item-name">Name:</label>
+                <input class="input-field" id="item-name" type="text" value="{{item.name}}" name="name">
+            </div>
+            <div class="form-field">   
+                <label for="edit-item-description">Description:</label>
+                <input class="input-field description" id="edit-item-description" type="text" value="{{item.description}}" name="description">
+            </div>
+            <div class="form-field">    
+                <label for="edit-item-category">Category:</label>
+                <select class="input-field" id="edit-item-category" name="category">
+                    {% for category in categories: %}
+                        <option value={{category.id}}
+                            {% if category.name == item.category.name %}
+                                selected
+                            {% endif %}
+                            >
+                        {{category.name}}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="control-buttons">
+                <input class="button update-button" type="submit" value="Update Item">
+            </div>
+        </form>
+    </section>
 {% endblock %}

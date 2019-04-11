@@ -162,9 +162,9 @@ def get_user_id(email):
 
 def get_user():
     # Check if user is logged in
-    print('Cheking if user email is in login_session')
+    # print('Cheking if user email is in login_session')
     user = login_session.get('email')
-    print('Email in login_session is: {}'.format(user))
+    # print('Email in login_session is: {}'.format(user))
     # If user is logged in get user info
     if user is not None:
         user = session.query(User).filter_by(
@@ -193,20 +193,24 @@ def gdisconnect():
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
     # If revoke was succesfull, clear login_session information
-    print('User {} is succesfully logged out'.format(login_session['email']))
     if result['status'] == '200':
+        print('User {} is succesfully logged out'.format(login_session['email']))
         del login_session['access_token']
         del login_session['google_id']
         del login_session['username']
         del login_session['email']
         del login_session['picture']
         return redirect(url_for('show_catalog'))
-    # If not send error message
+    # If not lot error, and clear login-session
     else:
-        response = make_response(json.dumps(
-            'Failed to revoke token for user'), 400)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+        # Log failure to revoke token
+        print('Failed to revoke token from user')
+        del login_session['access_token']
+        del login_session['google_id']
+        del login_session['username']
+        del login_session['email']
+        del login_session['picture']
+        return redirect(url_for('show_catalog'))
 
 
 # home page to display all categories and the last few added items

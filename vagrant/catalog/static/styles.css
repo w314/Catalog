@@ -29,10 +29,6 @@ video {
   box-sizing: border-box;
 }
 
-.full-width {
-    width: 100%;
-}
-
 .wrapper {
     max-width: 50rem;
     margin: auto;
@@ -46,6 +42,16 @@ video {
   flex-wrap: wrap;
 }
 
+
+
+.content-container {
+    width: 100%;
+    background-color: var(--list-background);
+    margin: 1.25rem;
+    padding: 1.25rem;
+    border: 0.1875rem solid var(--white);
+    box-shadow: 0.625rem 0.625rem 0.625rem var(--light-gray)
+}
 
 /*** HEADER ***/
 
@@ -77,14 +83,6 @@ nav {
 
 
 /*** MAIN CONTENT ***/
-.categories,
-.items {
-  background-color: var(--list-background);
-  margin: 1.25rem;
-  padding: 1.25rem;
-  border: 0.1875rem solid var(--white);
-  box-shadow: 0.625rem 0.625rem 0.625rem var(--light-gray)
-}
 
 li {
     list-style-type: none;
@@ -107,6 +105,17 @@ a:visited {
   color: var(--list-item-visited);
 }
 
+.full-page-container {
+    position: relative;
+    width: 80%;
+    padding: 1.25rem 1.875rem 1.25rem 1.875rem;
+    margin: 1.25rem auto 0 auto;
+}
+
+#flash-message {
+    width: 100%;
+    color: var(--category-in-brackets);
+}
 
 /*** CATEGORY ***/
 
@@ -146,11 +155,6 @@ a:visited {
 
 /*** SHOW CATEGORY PAGE ***/
 
-#category-page {
-    width: 80%;
-    padding: 1.25rem 1.875rem 1.25rem 1.875rem;
-    margin: 1.25rem auto 0 auto;
-}
 
 #new-item-category {
     top: 0.625rem;
@@ -161,10 +165,6 @@ a:visited {
     position: relative;
     padding: 1.25rem 0.625rem 1.25rem 0.625rem;
 
-}
-
-.item-category {
-    /*border-bottom: 0.0625rem dotted var(--category-in-brackets);*/
 }
 
 .item-description {
@@ -189,10 +189,7 @@ div.edit-delete .delete-button {
     padding: 0.3125rem;
     color: var(--list-item-visited);
 }
-/*
-div.edit-delete .delete-button {
-}
-*/
+
 div.edit-delete .edit-button {
     border-right: 0.125rem solid var(--title);
 }
@@ -201,9 +198,66 @@ div.edit-delete .edit-button {
 i.fa-edit,
 i.fa-trash {
     text-decoration: underline;
-
 }
+
 .edit-button {
     margin: 0 1.25rem 0 0;
     padding: 0 1.25rem 0 0;
 }
+
+
+/*** FORMS ***/
+
+
+.form {
+    padding: 0.625rem 2.5rem 3.125rem 2.5rem;
+    position: relative;
+}
+
+.form-field {
+    margin: 0 0 1.25rem 0;
+}
+
+label {
+    display: block;
+    padding: 0 0 0.625rem 0;
+}
+
+.input-field {
+    margin: 0 0 0 0.625rem;
+    padding: 0.625rem;
+    border: 0.0625rem dotted var(--category-in-brackets);
+    border-radius: 0.3125rem;
+}
+
+.description {
+    width: 60%;
+    max-width: 80%;
+    min-height: 30%;
+}
+
+
+.button {
+    font: 400 1rem arial, sans-serif;
+    padding: 0.3125rem;
+}
+
+div.control-buttons .update-button {
+    background-color: var(--header-background);
+    border: 0.125rem solid var(--category-in-brackets);
+    border-radius: 0.3125rem;
+    position: absolute;
+    bottom: 0.3125rem;
+    right: 7.5rem;
+}
+
+section.full-page-container .cancel-button {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    color: var(--title);
+    border-bottom: 0.0625rem solid var(--title);
+    padding-bottom: 0;
+/*    text-decoration: underline;
+    text-decoration-color: var(--title);
+*/}
