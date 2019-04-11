@@ -7,23 +7,36 @@
 {% endblock %}
 
 {% block content %}
-    <form method="post" action="{{url_for('create_item')}}">
-        <p>Item Name:</p>
-        <input type="text" name="name">
-        <p>Item Description:</p>
-        <input type="text" name="description">
-        <p>Category:</p>
-        <select name="category">
-            {% for category in categories: %}
-            <option value={{category.id}}
-                {% if category.name == category_name %}
-                    selected
-                {% endif %}
-                >
-            {{category.name}}
-            </option>
-            {% endfor %}
-        </select>
-        <input type="submit" value="Create Item">
-    </form>
+    <section class="content-container full-page-container">
+        <h2>Add New Item</h2>
+        <a 
+            class="button cancel-button" 
+            href="{{url_for('show_catalog')}}"
+        >
+            <i class="fa fa-times"> Cancel</i>
+        </a>
+        <form class="form" method="post" action="{{url_for('create_item')}}">
+            <div class="form-field">
+                <label for="create-item-name">Name:</label>
+                <input class="input-field" id="create-item-name" type="text" name="name">
+            </div>
+            <div class="form-field">   
+                <label for="create-item-description">Description:</label>
+                <input class="input-field description" id="create-item-description" type="text" name="description">
+            </div>
+            <div class="form-field">    
+                <label for="create-item-category">Category:</label>
+                <select class="input-field" id="create-item-category" name="category">
+                    {% for category in categories: %}
+                        <option value={{category.id}}>
+                        {{category.name}}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="control-buttons">
+                <input class="button update-button" type="submit" value="Add Item">
+            </div>
+        </form>
+    </section>
 {% endblock %}
