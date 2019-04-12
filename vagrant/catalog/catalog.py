@@ -163,13 +163,12 @@ def get_user_id(email):
 def get_user():
     # Check if user is logged in
     # print('Cheking if user email is in login_session')
-    user_email = login_session.get('email')
-    print('==> Email in login_session is: {}'.format(user_email))
+    user = login_session.get('email')
+    print('==> Email in login_session is: {}'.format(user))
     # If user is logged in get user info
-    if user_email is not None:
+    if user is not None:
         user = session.query(User).filter_by(
             email=user_email).one()
-    print('Returning user: {}'.format(user))
     return user
 
 
