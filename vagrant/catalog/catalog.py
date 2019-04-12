@@ -336,3 +336,5 @@ if __name__ == '__main__':
 # - do not let user enter empty items
 # - if going to new item from catalog return to catalog
 # - style login page
+# - when closing show-item go back where you came from? 
+#   (it always goes back to category) should it go back to catalog?
