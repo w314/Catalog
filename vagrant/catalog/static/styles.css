@@ -163,13 +163,19 @@ a:visited {
 
 .item-category {
     position: relative;
-    padding: 1.25rem 0.625rem 1.25rem 0.625rem;
+    padding: 0.625rem 0.625rem 1.25rem 0.625rem;
+    /*padding: 1.25rem 0.625rem 1.25rem 0.625rem;*/
 
 }
 
+section.show-category #items {
+    margin-bottom: 2.5rem;
+}
+
 .item-description {
-    padding: 1.25rem 0.625rem 0.625rem 0.625rem;
-    margin: 0.625rem 0.625rem 1.25rem 0.625rem;
+    padding: 0.625rem;
+    /*margin: 0.625rem 0.625rem 0.9375rem 0.625rem;*/
+    margin: 0 0.625rem 0 0.625rem;
     font-style: italic;
     color: var(--title);
     background-color: var(--white);
@@ -177,13 +183,22 @@ a:visited {
     border-radius: 0.3125rem;
 }
 
+.control-section {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    margin: 0 0 0.625rem 0;
+}
 
-.edit-delete {
+.control-section a:visited {
+    color: var(--title);
+}
+/*.edit-delete {
     position: absolute;
     bottom: 0.625rem;
     right: 1.5625rem;
 }
-
+*/
 div.edit-delete .edit-button 
 div.edit-delete .delete-button {
     padding: 0.3125rem;

@@ -4,33 +4,35 @@
 
 {% block content %}
     {# Show create new item button if user is logged in #}
-    <section class="content-container full-page-container">
+    <section class="content-container full-page-container show-category">
         <h2>{{category.name}}</h2>
         <ul id="items">
             {% for item in items: %}
                 <li class="item item-category">
-                    <a href="{{url_for(
-                        'show_item', category_name=item.category.name, item_name=item.name)}}">
-                            {{item.name}}
-                    </a>
+                    <div class="control-section">
+                        <a href="{{url_for(
+                            'show_item', category_name=item.category.name, item_name=item.name)}}">
+                                {{item.name}}
+                        </a>
+                        {# Shwow edit & delete buttons if user is owner of item #}
+                        {% if user.id == item.user.id: %}
+                            <div class="edit-delete">
+                                <a 
+                                    class="edit-button" 
+                                    href="{{url_for('edit_item', item_name=item.name)}}"
+                                >
+                                    <i class="fa fa-edit"> Edit</i>
+                                </a>                    
+                                <a 
+                                    class="delete-button" 
+                                    href="{{url_for('delete_item', item_name=item.name)}}"
+                                >
+                                    <i class="fa fa-trash"> Delete</i>
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
                     <div class="item-description">{{item.description}}</div>
-                    {# Shwow edit & delete buttons if user is owner of item #}
-                    {% if user.id == item.user.id: %}
-                        <div class="edit-delete">
-                            <a 
-                                class="edit-button" 
-                                href="{{url_for('edit_item', item_name=item.name)}}"
-                            >
-                                <i class="fa fa-edit"> Edit</i>
-                            </a>                    
-                            <a 
-                                class="delete-button" 
-                                href="{{url_for('delete_item', item_name=item.name)}}"
-                            >
-                                <i class="fa fa-trash"> Delete</i>
-                            </a>
-                        </div>
-                    {% endif %}
                 </li>
             {% endfor %}
         </ul>
@@ -43,5 +45,4 @@
             </a>
         {% endif %}
     </section>
-
 {% endblock %}
