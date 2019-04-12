@@ -244,7 +244,7 @@ def item_JSON(category_name, item_name):
 @app.route('/')
 @app.route('/catalog')
 def show_catalog():
-    # Get categories to show
+    # Get all categories
     categories = session.query(Category).all()
     # Limit items shown to:
     items_to_show = 10
@@ -287,6 +287,9 @@ def create_item(category_name=''):
     if 'username' not in login_session:
         return redirect('/login')
     if request.method == 'POST':
+        if request.form['name'] == '':
+            flash('Item not created. Cannot create item without a name')
+            return redirect(url_for('show_catalog'))
         new_item = Item(
             name=request.form['name'],
             description=request.form['description'],
