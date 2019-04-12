@@ -168,7 +168,7 @@ def get_user():
     # If user is logged in get user info
     if user is not None:
         user = session.query(User).filter_by(
-            email=user_email).one()
+            email=login_session['email']).one()
     return user
 
 
