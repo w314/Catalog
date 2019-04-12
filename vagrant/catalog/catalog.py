@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect, flash
+from flask import Flask, render_template, url_for, request, redirect, flash, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from catalog_db_setup import Base, Category, Item, User
@@ -163,12 +163,12 @@ def get_user_id(email):
 def get_user():
     # Check if user is logged in
     # print('Cheking if user email is in login_session')
-    user = login_session.get('email')
-    # print('Email in login_session is: {}'.format(user))
+    user_email = login_session.get('email')
+    print('==> Email in login_session is: {}'.format(user_email))
     # If user is logged in get user info
-    if user is not None:
+    if user_email is not None:
         user = session.query(User).filter_by(
-            email=login_session['email']).one()
+            email=user_email).one()
     print('Returning user: {}'.format(user))
     return user
 
@@ -213,7 +213,34 @@ def gdisconnect():
         return redirect(url_for('show_catalog'))
 
 
-# home page to display all categories and the last few added items
+# JSON endpoint for catalog
+@app.route('/catalog.json')
+def catalog_JSON():
+    categories = session.query(Category).all()
+    catalog=[category.serialize for category in categories]
+    for category in catalog:
+        items = session.query(Item).filter_by(category_id=category['id']).all()
+        category['items'] = [item.serialize for item in items]
+    print(catalog)
+    return jsonify(Catalog=catalog)
+
+
+# JSON endpoint for category
+@app.route('/catalog/<category_name>.json')
+def category_JSON(category_name):
+    category = session.query(Category).filter_by(name=category_name).one()
+    items = session.query(Item).filter_by(category_id=category.id).all()
+    return jsonify(category_items=[item.serialize for item in items])
+
+
+# JSON endpoint for item
+@app.route('/catalog/<category_name>/<item_name>.json')
+def item_JSON(category_name, item_name):
+    item = session.query(Item).filter_by(name=item_name).one()
+    return jsonify(item=[item.serialize])
+
+
+# Home page to display all categories and the last few added items
 @app.route('/')
 @app.route('/catalog')
 def show_catalog():

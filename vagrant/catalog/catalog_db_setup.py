@@ -21,6 +21,13 @@ class Category(Base):
     name = Column(String(80), nullable=False, unique=True)
     id = Column(Integer, primary_key=True)
 
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+        }
+
 
 class Item(Base):
     __tablename__ = 'item'
@@ -33,6 +40,15 @@ class Item(Base):
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
 
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'category_id': self.category_id,
+            'user_id': self.user_id
+        }
 
 # print('Catalog database is created.')
 
