@@ -1,4 +1,5 @@
-from flask import Flask, render_template, url_for, request, redirect, flash, jsonify
+from flask import Flask, render_template, url_for, request
+from flask import redirect, flash, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from catalog_db_setup import Base, Category, Item, User
@@ -156,7 +157,7 @@ def get_user_id(email):
     try:
         user = session.query(User).filter_by(email=email).one()
         return user.id
-    except:
+    except Exception:
         return None
 
 
@@ -193,7 +194,8 @@ def gdisconnect():
     result = h.request(url, 'GET')[0]
     # If revoke was succesfull, clear login_session information
     if result['status'] == '200':
-        print('User {} is succesfully logged out'.format(login_session['email']))
+        print('User {} is succesfully logged out'.format(
+            login_session['email']))
         del login_session['access_token']
         del login_session['google_id']
         del login_session['username']
@@ -216,7 +218,7 @@ def gdisconnect():
 @app.route('/catalog.json')
 def catalog_JSON():
     categories = session.query(Category).all()
-    catalog=[category.serialize for category in categories]
+    catalog = [category.serialize for category in categories]
     for category in catalog:
         items = session.query(Item).filter_by(category_id=category['id']).all()
         category['items'] = [item.serialize for item in items]
@@ -293,11 +295,12 @@ def create_item(category_name=''):
             return redirect(url_for('show_catalog'))
         # Check if name is uniqe in category
         name_count = session.query(Item).filter(
-            Item.name==request.form['name'],
-            Item.category_id==request.form['category']).count()
+            Item.name == request.form['name'],
+            Item.category_id == request.form['category']).count()
         # Send error message if the name is already exists in the category
         if name_count > 0:
-            flash('Item not created. Category already has an item with the name selected.')
+            flash('''Item not created.
+                 Category already has an item with the name selected.''')
             return redirect(url_for('show_catalog'))
         # Create new item if input data was all right
         new_item = Item(
@@ -323,7 +326,8 @@ def create_item(category_name=''):
 
 
 # edit item page to edit specific item
-@app.route('/catalog/<category_name>/<item_name>/<item_id>/edit', methods=['GET', 'POST'])
+@app.route('/catalog/<category_name>/<item_name>/<item_id>/edit',
+           methods=['GET', 'POST'])
 def edit_item(category_name, item_name, item_id):
     # If user is not logged in redirect to login page
     if 'username' not in login_session:
@@ -346,14 +350,15 @@ def edit_item(category_name, item_name, item_id):
 
 
 # Delete item page
-@app.route('/catalog/<category_name>/<item_name>/<item_id>/delete', methods=['GET', 'POST'])
+@app.route('/catalog/<category_name>/<item_name>/<item_id>/delete',
+           methods=['GET', 'POST'])
 def delete_item(category_name, item_name, item_id):
     # If user is not logged in redirect to login page
     if 'username' not in login_session:
         return redirect('/login')
     # item = session.query(Item).join(Category).\
     #         filter(Item.name==item_name, Category.name==category_name).one()
-    item = session.query(Item).filter(Item.id==item_id).one()
+    item = session.query(Item).filter(Item.id == item_id).one()
     if request.method == 'POST':
         # Save name of category for redirect
         category_name = item.category.name
@@ -373,11 +378,3 @@ if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
     app.run(host='0.0.0.0', port=8000, threaded=False)
-
-# TO DO:
-# - do not let user enter empty items
-# - if going to new item from catalog return to catalog
-# - style login page
-# - when closing show-item go back where you came from? 
-#   (it always goes back to category) should it go back to catalog?
-# - show_catalog.html doesn't display category
