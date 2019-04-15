@@ -44,6 +44,10 @@ Users can only edit items they have created. To edit an item either click on it 
 ### To delete an item
 Users can only delete items they have created. To delet an item either click on it on the home page and use the delete button when the item is displayed or go to it's category page and use the delete button you find next to the item's name. 
 
+### To get inforamtion in json format
+* Use localhost:8000/catalog.json to get all the catalog information in json format.
+* Use localhost:8000/catalog/<category_name>.json to get all the items of a specific category.
+* User localhost:8000/catalog/<category_name>/<item_name>/<item_id>.json to get details of a specific item in json format.
 
 ## Attribution
 
