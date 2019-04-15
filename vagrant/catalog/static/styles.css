@@ -86,6 +86,19 @@ nav {
 
 }
 
+/*** LOGIN ***/
+
+.google-login {
+    text-align: center;
+}
+
+.google-button {
+    background-color: var(--header-background);
+    font-size: 1.1rem;
+    color: var(--title);
+    padding: 0.625rem;
+}
+
 
 /*** MAIN CONTENT ***/
 

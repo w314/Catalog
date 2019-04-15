@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>{% block title %}{% endblock %}</title>
-        {% block head_script %}{% endblock %}
+<head>
+    <meta charset="utf-8">
+    <title>Login</title>
+    {# link to css #}
+    <link rel="stylesheet" href="../../../../static/styles.css">
+
     <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
     <script
         src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js">
@@ -23,9 +25,11 @@
     <!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
 </head>
 <body>
-    <!-- GOOGLE PLUS SIGN IN BUTTON-->      
-      <button id="signinButton">Google Signin</button>
-    <!--END GOOGLE PLUS SIGN IN BUTTON -->
+    <div class="wrapper content-container full-page-content google-login">
+        <!-- GOOGLE PLUS SIGN IN BUTTON-->      
+          <button class="google-button" id="signinButton">Google Signin</button>
+        <!--END GOOGLE PLUS SIGN IN BUTTON -->
+    </div>
     <div id="result"></div>
     <script>
         $('#signinButton').click(function() {
@@ -41,10 +45,6 @@
                         contentType: 'application/octet-stream; charset=utf-8',
                         success: function(result) {
                             if(result) {
-                                // $('#result').html('Login Succesful!</br>'+result+'<br>Redirecting...')
-                                // setTimeout(function() {
-                                //     window.location.href='/catalog';
-                                // }, 4000);
                                 window.location.href='/catalog';
                             }
                         },
