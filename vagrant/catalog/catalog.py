@@ -48,11 +48,11 @@ def gconnect():
         return response
     # If client has the right state token collect one-time code
     code = request.data
-    print('state token received is OK')
+    print('==> State token received is OK')
 
     # Try exchanging one-time code to credentails object
     # credential object will have the access token
-    print('Trying to exchange one-time code for credentils')
+    print('==> Trying to exchange one-time code for credentils')
     try:
         oauth_flow = flow_from_clientsecrets('client_secret.json',
                                              scope='')
@@ -109,8 +109,6 @@ def gconnect():
     userinfo_url = 'https://www.googleapis.com/oauth2/v1/userinfo'
     params = {'access_token': credentials.access_token, 'alt': 'json'}
     answer = requests.get(userinfo_url, params=params)
-    # print('Printing answer')
-    # print(answer)
     data = answer.json()
     login_session['username'] = data['name']
     login_session['picture'] = data['picture']
@@ -123,17 +121,10 @@ def gconnect():
         user_id = create_user(login_session)
     # Store user's id in login_session
     login_session['user_id'] = user_id
-    print('User {} is succesfully logged in'.format(login_session['email']))
+    print('==> User {} is succesfully logged in'.format(
+        login_session['email']))
 
-    output = '''
-        <h1>Welcome {} !</h1>
-        <img
-            src = "{}"
-            style = "width: 300px; height: 300px;
-                    border-radius: 150px;-webkit-border-radius: 150px;
-                    -moz-border-radius: 150px;"
-        >
-        '''.format(login_session['username'], login_session['picture'])
+    output = '<h1>Welcome {} !</h1>'.format(login_session['username'])
     return output
 
 
@@ -148,7 +139,7 @@ def create_user(login_session):
     # Return new user's id
     new_user = session.query(User).filter_by(
         email=login_session['email']).one()
-    print('User: {} is created with id: {}'.format(
+    print('==> User: {} is created with id: {}'.format(
         login_session['email'], new_user.id))
     return new_user.id
 
@@ -162,8 +153,6 @@ def get_user_id(email):
 
 
 def get_user():
-    # Check if user is logged in
-    # print('Cheking if user email is in login_session')
     user = login_session.get('email')
     print('==> Email in login_session is: {}'.format(user))
     # If user is logged in get user info
@@ -179,13 +168,13 @@ def gdisconnect():
     access_token = login_session['access_token']
     # If there is no access_token in login_session abort
     if access_token is None:
-        print('access_token is None')
+        print('==> Access_token is None')
         response = make_response(json.dumps(
             'Current user not connected'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-    print('In gdisconnet access_token is: {}'.format(access_token))
-    print('In gconnect user email is: {}'.format(login_session['email']))
+    print('==> In gdisconnet access_token is: {}'.format(access_token))
+    print('==> In gconnect user email is: {}'.format(login_session['email']))
 
     # Revoke access_token from user
     url = 'https://accounts.google.com/o/oauth2/revoke?token={}'.format(
@@ -194,7 +183,7 @@ def gdisconnect():
     result = h.request(url, 'GET')[0]
     # If revoke was succesfull, clear login_session information
     if result['status'] == '200':
-        print('User {} is succesfully logged out'.format(
+        print('==> User {} is succesfully logged out'.format(
             login_session['email']))
         del login_session['access_token']
         del login_session['google_id']
@@ -202,10 +191,10 @@ def gdisconnect():
         del login_session['email']
         del login_session['picture']
         return redirect(url_for('show_catalog'))
-    # If not lot error, and clear login-session
+    # Log error and clear login-session if revoke was unsuccesful
     else:
         # Log failure to revoke token
-        print('Failed to revoke token from user')
+        print('==> Failed to revoke token from user.')
         del login_session['access_token']
         del login_session['google_id']
         del login_session['username']
@@ -275,7 +264,7 @@ def show_category(category_name):
 def show_item(category_name, item_name, item_id):
     item = session.query(Item).filter_by(id=item_id).one()
     user = get_user()
-    print('Showing {} in {}'.format(
+    print('==> Showing {} in {}'.format(
         item.name, item.category.name))
     return render_template(
         'show_item.html', category_name=category_name, item=item, user=user)
@@ -335,6 +324,13 @@ def edit_item(category_name, item_name, item_id):
     categories = session.query(Category).all()
     item = session.query(Item).filter_by(id=item_id).one()
     if request.method == 'POST':
+        # Check if user logged in is authorized to make changes
+        if item.user_id != login_session['user_id']:
+            flash('''Item is not updated.
+                 Only creator of item is authorized to change it.''')
+            return redirect(url_for('show_category',
+                                    category_name=item.category.name))
+        # Update item is user is authorized to make changes
         item.name = request.form['name']
         item.description = request.form['description']
         item.category_id = request.form['category']
@@ -356,13 +352,17 @@ def delete_item(category_name, item_name, item_id):
     # If user is not logged in redirect to login page
     if 'username' not in login_session:
         return redirect('/login')
-    # item = session.query(Item).join(Category).\
-    #         filter(Item.name==item_name, Category.name==category_name).one()
     item = session.query(Item).filter(Item.id == item_id).one()
     if request.method == 'POST':
         # Save name of category for redirect
         category_name = item.category.name
-        # Delete item
+        # Check if user logged in is authorized to make changes
+        if item.user_id != login_session['user_id']:
+            flash('''Item is not deleted.
+                 Only creator of item is authorized to delete it.''')
+            return redirect(url_for('show_category',
+                            category_name=category_name))
+        # Delete item is user is authorized to delete
         session.delete(item)
         session.commit()
         # Flash message about succesful deletion
