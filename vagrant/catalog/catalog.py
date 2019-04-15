@@ -235,9 +235,9 @@ def category_JSON(category_name):
 
 
 # JSON endpoint for item
-@app.route('/catalog/<category_name>/<item_name>.json')
-def item_JSON(category_name, item_name):
-    item = session.query(Item).filter_by(name=item_name).one()
+@app.route('/catalog/<category_name>/<item_name>/<item_id>.json')
+def item_JSON(category_name, item_name, item_id):
+    item = session.query(Item).filter_by(id=item_id).one()
     return jsonify(item=[item.serialize])
 
 
