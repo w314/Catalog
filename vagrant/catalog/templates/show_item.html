@@ -27,7 +27,10 @@
                     </a>                    
                     <a 
                         class="delete-button" 
-                        href="{{url_for('delete_item', item_name=item.name)}}"
+                        href="{{url_for('delete_item', 
+                        category_name=item.category.name,
+                        item_name=item.name,
+                        item_id=item.id)}}"
                     >
                         <i class="fa fa-trash"> Delete</i>
                     </a>

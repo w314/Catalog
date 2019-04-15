@@ -15,12 +15,14 @@
         </a>
             Are you sure you want to delete <span id="item-to-delete">{{item.name}}</span>?</h2>
         <form class="form delete-form" method="post" 
-            action="{{url_for('delete_item', item_name=item.name)}}">
+            action="{{url_for('delete_item',
+                    category_name=item.category.name,
+                    item_name=item.name,
+                    item_id=item.id)}}">
             <p class="name">
                 {{item.name}} 
                 <span class="category-of-item">({{item.category.name}})</span>
             </p>
-            <p class="hidden">{{item.id}}</p>
             <p class="description">{{item.description}}</p>
             <div class="control-buttons">
                 <input class="button update-button" type="submit" value="Delete">

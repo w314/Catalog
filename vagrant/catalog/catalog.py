@@ -346,14 +346,14 @@ def edit_item(category_name, item_name, item_id):
 
 
 # Delete item page
-@app.route('/catalog/<item_name>/delete', methods=['GET', 'POST'])
-def delete_item(item_name):
+@app.route('/catalog/<category_name>/<item_name>/<item_id>/delete', methods=['GET', 'POST'])
+def delete_item(category_name, item_name, item_id):
     # If user is not logged in redirect to login page
     if 'username' not in login_session:
         return redirect('/login')
     # item = session.query(Item).join(Category).\
     #         filter(Item.name==item_name, Category.name==category_name).one()
-    item = session.query(Item).filter(Item.name==item_name).one()
+    item = session.query(Item).filter(Item.id==item_id).one()
     if request.method == 'POST':
         # Save name of category for redirect
         category_name = item.category.name
