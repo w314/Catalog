@@ -32,7 +32,7 @@ class Category(Base):
 class Item(Base):
     __tablename__ = 'item'
 
-    name = Column(String(80), nullable=False, unique=True)
+    name = Column(String(80), nullable=False)
     id = Column(Integer, primary_key=True)
     description = Column(String(250))
     category_id = Column(Integer, ForeignKey('category.id'))
