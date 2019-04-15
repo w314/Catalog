@@ -269,9 +269,9 @@ def show_category(category_name):
 
 
 # Item page to display one item
-@app.route('/catalog/<category_name>/<item_name>')
-def show_item(category_name, item_name):
-    item = session.query(Item).filter_by(name=item_name).one()
+@app.route('/catalog/<category_name>/<item_name>/<item_id>')
+def show_item(category_name, item_name, item_id):
+    item = session.query(Item).filter_by(id=item_id).one()
     user = get_user()
     print('Showing {} in {}'.format(
         item.name, item.category.name))

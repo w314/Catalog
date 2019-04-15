@@ -22,7 +22,10 @@
             {% for item in items: %}
                 <li class="item">
                     <a href="{{url_for(
-                        'show_item', category_name=item.category.name, item_name=item.name)}}">
+                        'show_item',
+                        category_name=item.category.name,
+                        item_name=item.name,
+                        item_id=item.id)}}">
                         {{item.name}}</a>
                     <span class="category-of-item">({{item.category.name}})</span>
                 </li>
