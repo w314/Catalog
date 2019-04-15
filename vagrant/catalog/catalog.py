@@ -323,13 +323,13 @@ def create_item(category_name=''):
 
 
 # edit item page to edit specific item
-@app.route('/catalog/<item_name>/edit', methods=['GET', 'POST'])
-def edit_item(item_name):
+@app.route('/catalog/<category_name>/<item_name>/<item_id>/edit', methods=['GET', 'POST'])
+def edit_item(category_name, item_name, item_id):
     # If user is not logged in redirect to login page
     if 'username' not in login_session:
         return redirect('/login')
     categories = session.query(Category).all()
-    item = session.query(Item).filter_by(name=item_name).one()
+    item = session.query(Item).filter_by(id=item_id).one()
     if request.method == 'POST':
         item.name = request.form['name']
         item.description = request.form['description']
@@ -380,3 +380,4 @@ if __name__ == '__main__':
 # - style login page
 # - when closing show-item go back where you came from? 
 #   (it always goes back to category) should it go back to catalog?
+# - show_catalog.html doesn't display category

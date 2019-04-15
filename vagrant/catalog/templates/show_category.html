@@ -22,9 +22,10 @@
                             <div class="edit-delete">
                                 <a 
                                     class="edit-button" 
-                                    href="{{url_for('edit_item', 
+                                    href="{{url_for('edit_item',
                                     category_name=item.category.name,
-                                    item_name=item.name)}}"
+                                    item_name=item.name,
+                                    item_id=item.id)}}"
                                 >
                                     <i class="fa fa-edit"> Edit</i>
                                 </a>                    

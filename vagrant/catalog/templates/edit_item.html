@@ -16,7 +16,10 @@
         >
             <i class="fa fa-times"> Cancel</i>
         </a>
-        <form class="form" method="post" action="{{url_for('edit_item', item_name=item.name)}}">
+        <form class="form" method="post" action="{{url_for('edit_item',
+        category_name=item.category.name,
+        item_name=item.name,
+        item_id=item.id)}}">
             <div class="form-field">
                 <label for="edit-item-name">Name:</label>
                 <input class="input-field" id="edit-item-name" type="text" value="{{item.name}}" name="name">
