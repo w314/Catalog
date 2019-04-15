@@ -50,7 +50,6 @@ class Item(Base):
             'user_id': self.user_id
         }
 
-# print('Catalog database is created.')
 
 engine = create_engine('sqlite:///catalog.db')
 Base.metadata.create_all(engine)
