@@ -286,9 +286,20 @@ def create_item(category_name=''):
     if 'username' not in login_session:
         return redirect('/login')
     if request.method == 'POST':
+        # Check if item is valid
+        # Check if name field is filled out
         if request.form['name'] == '':
             flash('Item not created. Cannot create item without a name')
             return redirect(url_for('show_catalog'))
+        # Check if name is uniqe in category
+        name_count = session.query(Item).filter(
+            Item.name==request.form['name'],
+            Item.category_id==request.form['category']).count()
+        # Send error message if the name is already exists in the category
+        if name_count > 0:
+            flash('Item not created. Category already has an item with the name selected.')
+            return redirect(url_for('show_catalog'))
+        # Create new item if input data was all right
         new_item = Item(
             name=request.form['name'],
             description=request.form['description'],
@@ -340,7 +351,9 @@ def delete_item(item_name):
     # If user is not logged in redirect to login page
     if 'username' not in login_session:
         return redirect('/login')
-    item = session.query(Item).filter_by(name=item_name).one()
+    # item = session.query(Item).join(Category).\
+    #         filter(Item.name==item_name, Category.name==category_name).one()
+    item = session.query(Item).filter(Item.name==item_name).one()
     if request.method == 'POST':
         # Save name of category for redirect
         category_name = item.category.name
